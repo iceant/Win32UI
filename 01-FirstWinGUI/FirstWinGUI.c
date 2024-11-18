@@ -26,15 +26,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
             return FALSE;
         }
     }
-    GetCommandLineW();
-    CommandLineToArgvW()
     
     printf("hInstance: %p\n", hInstance);
     printf("hPrevInstance: %p\n", hPrevInstance);
     printf("lpszCmdShow: %s\n", lpszCmdParam);
     printf("nCmdShow: %d\n", nCmdShow);
     
-    MainFrame_HWND = CreateWindow(MAINFRAME_CLASSNAME, "MainFrame"
+    MainFrame_HWND = CreateWindowA(MAINFRAME_CLASSNAME, "MainFrame"
                                   , WS_OVERLAPPEDWINDOW
                                   , CW_USEDEFAULT, CW_USEDEFAULT
                                   , CW_USEDEFAULT, CW_USEDEFAULT
@@ -47,10 +45,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
     if(!MainFrame_HWND){
         return FALSE;
     }
-    SW_HIDE;
+    
     ShowWindow(MainFrame_HWND, nCmdShow);
     UpdateWindow(MainFrame_HWND);
-    
+
     while(GetMessage(&Msg, NULL, 0, 0)){
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
