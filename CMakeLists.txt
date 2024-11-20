@@ -3,4 +3,5 @@ project(Win32UI C)
 
 add_subdirectory(01-FirstWinGUI)
 
+add_subdirectory(98-GDIPlus_LinearGradientBrush)
 add_subdirectory(99-Tools)
