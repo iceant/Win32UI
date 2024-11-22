@@ -1,0 +1,34 @@
+#include "Resource.h"
+
+Menu MENU
+BEGIN
+    POPUP "Poems"
+    BEGIN
+        MENUITEM "Bitmap", CM_BITMAP
+        MENUITEM "Brahmin", CM_BRAHMIN
+        MENUITEM "WoodNotes", CM_WOODNOTES
+        MENUITEM "SeaShore", CM_SEASHORE
+    END
+    MENUITEM "&About", CM_ABOUT
+END
+
+/* -------------------------------------------------------------------------------------------------------------- */
+/* ICON */
+
+Icon ICON "Application.ico"
+
+Cursor CURSOR "cursor.ico"
+
+Brahma CUSTOM Brahma.txt
+
+/* -------------------------------------------------------------------------------------------------------------- */
+/* DIALOG */
+
+About DIALOG 18, 18, 141, 58
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About Dialog"
+BEGIN
+    PUSHBUTTON "Ok", IDOK, 5, 39, 132, 12, WS_CHILD | WS_VISIBLE | WS_TABSTOP
+    CTEXT "Emerson Example", -1, 1, 9, 140, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
+    CTEXT "Copyright(c) World Community, Inc.", -1, 1, 23, 140, 10, WS_CHILD | WS_VISIBLE | WS_GROUP
+END

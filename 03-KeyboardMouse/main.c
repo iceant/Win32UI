@@ -33,6 +33,7 @@ static void OnPaint(HWND hwnd){
             "WM_MOUSEMOVE",
             "WM_MOUSEDOWN",
             "WM_MOUSEUP",
+            "WM_MOUSEWHEEL",
     };
 
     HDC PaintDC = BeginPaint(hwnd, &PaintStruct);
