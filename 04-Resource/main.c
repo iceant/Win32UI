@@ -1,5 +1,6 @@
 #include <main.h>
 #include <stdio.h>
+#include <strsafe.h>
 /* -------------------------------------------------------------------------------------------------------------- */
 /*  */
 
@@ -11,6 +12,7 @@
 
 static HINSTANCE g_hInstance;
 static HANDLE g_hResource;
+// static HANDLE g_hFindIcon;
 
 static int ScrollWidth;
 static int MaxLines = 21;
@@ -21,9 +23,40 @@ static int nPosition = 0;
 
 /* -------------------------------------------------------------------------------------------------------------- */
 /*  */
+static void ShowErrorMessage(LPCTSTR lpszFunction)
+{
+    // Retrieve the system error message for the last-error code
 
+    LPVOID lpMsgBuf;
+    LPVOID lpDisplayBuf;
+    DWORD dw = GetLastError();
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &lpMsgBuf,
+        0, NULL );
+
+    // Display the error message and exit the process
+
+    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
+    StringCchPrintf((LPTSTR)lpDisplayBuf,
+        LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+        TEXT("%s failed with error %d: %s"),
+        lpszFunction, dw, lpMsgBuf);
+    MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+
+    LocalFree(lpMsgBuf);
+    LocalFree(lpDisplayBuf);
+}
 
 static BOOL OnCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct){
+    g_hInstance = lpCreateStruct->hInstance;
     g_hResource = LoadResource(g_hInstance, FindResource(g_hInstance, "Brahma", "CUSTOM"));
     return TRUE;
 }
@@ -38,6 +71,8 @@ static void OnPaint(HWND hwnd){
     PAINTSTRUCT PaintStruct;
     RECT Rect;
     char* Poem;
+    HBITMAP hBitMap;
+
 
     HDC hdc = BeginPaint(hwnd, &PaintStruct);
 
@@ -48,6 +83,26 @@ static void OnPaint(HWND hwnd){
     Rect.top += 10;
     DrawText(hdc, Poem, -1, &Rect, DT_EXTERNALLEADING);
     GlobalUnlock(g_hResource);
+
+    hBitMap = LoadBitmap(g_hInstance, "find_icon");
+    // hBitMap = (HBITMAP)LoadImage(g_hInstance, "18655_find_icon.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    if (!hBitMap) {
+        // MessageBox(hwnd, "Failed to load bitmap", "Error", MB_OK|MB_ICONERROR);
+        ShowErrorMessage(__FUNCTION__);
+    }else {
+        HDC BitmapDC = CreateCompatibleDC(hdc);
+        HBITMAP BitmapOld = SelectObject(BitmapDC, hBitMap);
+        // for (int i=1; i < MaxLines; i++) {
+        //     for (int j=1; j < MaxLines; j++) {
+        //         BitBlt(hdc, i*258, j*258, 256, 256, BitmapDC, 200, 100, SRCCOPY);
+        //     }
+        // }
+        BitBlt(hdc, 300, 0, 256, 256, BitmapDC, 0, 0, SRCCOPY);
+        SelectBitmap(BitmapDC, BitmapOld);
+        DeleteDC(BitmapDC);
+        DeleteBitmap(hBitMap);
+    }
+
 
     EndPaint(hwnd, &PaintStruct);
 }

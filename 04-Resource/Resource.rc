@@ -19,7 +19,12 @@ Icon ICON "Application.ico"
 
 Cursor CURSOR "cursor.ico"
 
-Brahma CUSTOM Brahma.txt
+Brahma CUSTOM "Brahma.txt"
+
+find_icon BITMAP "find_icon.bmp"
+
+
+
 
 /* -------------------------------------------------------------------------------------------------------------- */
 /* DIALOG */
@@ -32,3 +37,4 @@ BEGIN
     CTEXT "Emerson Example", -1, 1, 9, 140, 8, WS_CHILD | WS_VISIBLE | WS_GROUP
     CTEXT "Copyright(c) World Community, Inc.", -1, 1, 23, 140, 10, WS_CHILD | WS_VISIBLE | WS_GROUP
 END
+
